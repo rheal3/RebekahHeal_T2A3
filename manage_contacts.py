@@ -1,13 +1,13 @@
 import inquirer
 import re
-from contact import Contacts
+from contact import Contact
 
-class ManageContacts: #subclass of contacts??
+class ManageContacts: #subclass of contact??
 
     def add_contact(self, contacts: list) -> None:
         # validate non entry?? blank fields?
         def email_validation(answers, current):
-            if not re.match('^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}[\.]?(\w{2,3})?$', current):
+            if not re.match('^[a-z0-9]+[\._-]?[a-z0-9]+[@]\w+[.]\w{2,3}[\.]?(\w{2,3})?$', current):
                 inquirer.ValidationError('', reason='Invalid email format.')
             return True
 
@@ -22,7 +22,7 @@ class ManageContacts: #subclass of contacts??
 
         contact_info = inquirer.prompt(contact_info)
 
-        new_contact = Contacts(**contact_info)
+        new_contact = Contact(**contact_info)
         contacts.append(new_contact.format_data())
 
 
@@ -30,5 +30,5 @@ contacts = [] #json file username[contacts]
 
 ezra = ManageContacts()
 ezra.add_contact(contacts)
-ezra.add_contact(contacts)
+
 print(contacts)
