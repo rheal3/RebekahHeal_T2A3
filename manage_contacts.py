@@ -5,7 +5,7 @@ from file import File
 
 class ManageContacts: #subclass of contact??
 
-    def add_contact(self, contact_list: list, groups_list: list) -> None:
+    def add_contact(self, contacts_list: dict, groups_list: list) -> None:
         # validate non entry?? blank fields?
         def email_validation(answers, current):
             if not re.match('^[a-z0-9]+[\._-]?[a-z0-9]+[@]\w+[.]\w{2,3}[\.]?(\w{2,3})?$', current):
@@ -22,20 +22,23 @@ class ManageContacts: #subclass of contact??
         contact_info = inquirer.prompt(contact_info)
 
         new_contact = Contact(**contact_info)
-        new_contact.format_data(contact_list)
+        new_contact.format_data(contacts_list)
 
-    def select_contact(self, contacts_list):
-        pass
+    # classmethod??
+    def select_contact(self, contacts_list: dict) -> dict:
+        choice = [inquirer.List('selected', message='Select Contact', choices=contacts_list.keys())]
+        choice = inquirer.prompt(choice)
+        return contacts_list[choice['selected']]
 
-# groups = ['family', 'friends', 'colleuges', 'boss', 'animals'] # get groups from Groups Class
-# user_data = File.load_data('client.txt')
-# user_data['contacts'] = []
+    def edit_contact(self, contact, contacts_list):
+        edit = [inquirer.List('field', message='Choose field to edit', choices=contact.keys())]
+        edit = inquirer.prompt(edit)
+        # can you put a function in inquirer to return specific field to edit? if edit['field'] == 'name' then ...
 
-# ezra = ManageContacts()
-# ezra.add_contact(user_data['contacts'], groups)
-#
-# File.save_to_file('client.txt', user_data)
-#
-# print(user_data)
-# print(ezra.format_contacts(user_data['contacts']))
-# ezra.select_contact(user_data['contacts'])
+contact = ManageContacts()
+contacts_list = File.load_data('client.txt')
+groups = ['family', 'friends', 'coworkers']
+# contact.add_contact(contacts, groups)
+# File.save_to_file('client.txt', contacts_list)
+# contact.select_contact(contacts_list)
+contact.edit_contact(contact.select_contact(contacts_list), contacts_list)
