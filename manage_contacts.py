@@ -4,20 +4,19 @@ from contact import Contact
 from file import File
 
 class ManageContacts: #subclass of contact??
+    @classmethod
+    def email_validation(cls, answers, current):
+        if not re.match('^[a-z0-9]+[\._-]?[a-z0-9]+[@]\w+[.]\w{2,3}[\.]?(\w{2,3})?$', current):
+            inquirer.ValidationError('', reason='Invalid email format.')
+        return True
+    @classmethod
+    def phone_validation(cls, answers, current): # how to account for international nums??
+        if not current.isnumeric() or not re.match('(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})', current):
+            inquirer.ValidationError('', reason='Invalid phone number.')
+        return True
 
     def add_contact(self, contacts_list: dict, groups_list: list) -> None:
-        # validate non entry?? blank fields?
-        def email_validation(answers, current):
-            if not re.match('^[a-z0-9]+[\._-]?[a-z0-9]+[@]\w+[.]\w{2,3}[\.]?(\w{2,3})?$', current):
-                inquirer.ValidationError('', reason='Invalid email format.')
-            return True
-
-        def phone_validation(answers, current): # how to account for international nums??
-            if not current.isnumeric() or not re.match('(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})', current):
-                inquirer.ValidationError('', reason='Invalid phone number.')
-            return True
-
-        contact_info = [inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='{firstname} {lastname} email', validate=email_validation), inquirer.Text(name='phone', message='{firstname} {lastname} phone number', validate=phone_validation), inquirer.Checkbox(name='groups', message='Select groups for {firstname} {lastname}', choices=[group for group in groups_list], default=[])]
+        contact_info = [inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='{firstname} {lastname} email', validate=ManageContacts.email_validation), inquirer.Text(name='phone', message='{firstname} {lastname} phone number', validate=ManageContacts.phone_validation), inquirer.Checkbox(name='groups', message='Select groups for {firstname} {lastname}', choices=[group for group in groups_list], default=[])]
 
         contact_info = inquirer.prompt(contact_info)
 
@@ -30,15 +29,44 @@ class ManageContacts: #subclass of contact??
         choice = inquirer.prompt(choice)
         return contacts_list[choice['selected']]
 
-    def edit_contact(self, contact, contacts_list):
-        edit = [inquirer.List('field', message='Choose field to edit', choices=contact.keys())]
+    # getter and setter method??
+    def edit_contact(self, contact: dict, contacts_list: dict) -> None:
+        edit = [inquirer.List('field', message='Choose field to edit', choices=['name', 'email', 'phone'])]
         edit = inquirer.prompt(edit)
-        # can you put a function in inquirer to return specific field to edit? if edit['field'] == 'name' then ...
+
+        if edit['field'] == 'name':
+            edit = [inquirer.Text('firstname', message='Enter firstname'), inquirer.Text('lastname', message='Enter lastname')]
+            edit = inquirer.prompt(edit)
+            new_name = edit['firstname'].capitalize() + " " + edit['lastname'].capitalize()
+            contacts_list[new_name] = contacts_list.pop(contact['name'])
+            contacts_list[new_name]['name'] = new_name
+        elif edit['field'] == 'email':
+            edit = [inquirer.Text('email', message='Enter email', validate=ManageContacts.email_validation)]
+            edit = inquirer.prompt(edit)
+            new_data = edit['email']
+            contacts_list[contact['name']]['email'] = edit['email']
+        elif edit['field'] == 'phone':
+            edit = [inquirer.Text('phone', message='Enter phone number', validate=ManageContacts.phone_validation)]
+            edit = inquirer.prompt(edit)
+            new_data = edit['phone']
+            contacts_list[contact['name']]['phone'] = edit['phone']
+
+    def view_individual_contact(self, contact):
+        print(f"Name: {contact['name']}\nEmail: {contact['email']}\nPhone: {contact['phone']}\nGroups: {contact['groups']}")
+
+    def view_all_contacts(self, contacts_list):
+        print(f"{'Name:':20}{'Email:':32}{'Phone:':20}{'Groups:':20}")
+        for contact, details in contacts_list.items():
+            print(f"{details['name']:20}{details['email']:32}{details['phone']:20}{details['groups']}")
+
+
 
 contact = ManageContacts()
 contacts_list = File.load_data('client.txt')
 groups = ['family', 'friends', 'coworkers']
-# contact.add_contact(contacts, groups)
+# contact.add_contact(contacts_list, groups)
 # File.save_to_file('client.txt', contacts_list)
 # contact.select_contact(contacts_list)
 contact.edit_contact(contact.select_contact(contacts_list), contacts_list)
+# contact.view_all_contacts(contacts_list)
+print(contacts_list)

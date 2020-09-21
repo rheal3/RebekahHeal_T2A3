@@ -10,6 +10,6 @@ class Contact:
         self.groups = groups
         self.last_contact = None
 
-    def format_data(self, contact_list):
+    def format_data(self, contacts_list):
         # return {"name": self.fullname, "email": self.email, "phone": self.phone, "groups": self.groups, "last_contact": self.last_contact}
-        contact_list[self.fullname] = {"name": self.fullname, "email": self.email, "phone": self.phone, "groups": self.groups, "last_contact": self.last_contact}
+        contacts_list[self.fullname] = {"name": self.fullname, "email": self.email, "phone": self.phone, "groups": self.groups, "last_contact": self.last_contact}
