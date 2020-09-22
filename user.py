@@ -8,12 +8,14 @@ class User:
     def user_menu(user_data):
         #clear screen
         options = inquirer.prompt([inquirer.List('choice', message="WELCOME TO THE APP!!!", choices=User.user_options)])
-        if options['choice'] == 'Login':
+        if options['choice'] == 'Login' and len(user_data) == 0:
+            print("Create new user to login.")
+        elif options['choice'] == 'Login':
             user = User.login(user_data)
-        else:
-            User.create_user(user_data)
-            File.save_to_file('client.json', user_data)
-            User.user_menu(user_data)
+            return user
+        User.create_user(user_data)
+        File.save_to_file('client.json', user_data)
+        User.user_menu(user_data)
 
     @classmethod
     def login(cls, user_data):
@@ -27,6 +29,7 @@ class User:
             return True
 
         user = inquirer.prompt([inquirer.Text('username', message="Enter username", validate=username_validation), inquirer.Password('password', message="Enter Password", validate=password_validation)])
+        return user['username']
 
     @classmethod
     def create_user(cls, user_data):
@@ -45,10 +48,6 @@ class User:
 
         user_data[new_user['username'].lower()] = {'password': new_user['validated_password'], 'contacts': {}}
 
-# new = User()
-user_data = File.load_data('client.json')
-# new.create_user(user_data)
 
-# user = User()
-
-User.user_menu(user_data)
+# user_data = File.load_data('client.json')
+# current_user = User.user_menu(user_data)
