@@ -2,9 +2,23 @@ import inquirer
 from file import File
 
 class Groups:
+    groups_options = ['Add Group', 'Edit Group', 'View All Groups', 'Add Users To Group'] # return to main option
     @staticmethod
     def groups_menu(user_data, groups_dict, file_path):
-        pass
+        options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=Groups.groups_options)])
+        if options['choice'] == 'Add Group':
+            Groups.add_group(groups_dict)
+            File.save_to_file(file_path, user_data)
+        elif options['choice'] == 'Edit Group':
+            Groups.edit_groups(Groups.select_group(groups_dict), groups_dict)
+            File.save_to_file(file_path, user_data)
+        elif options['choice'] == 'View All Groups':
+            Groups.view_all_groups(groups_dict)
+        elif options['choice'] == 'Add Users To Group':
+            Groups.add_users_to_group(contacts_dict, Groups.select_group(groups_dict))
+            File.save_to_file(file_path, user_data)
+        #clear screen
+        Groups.groups_menu(user_data, groups_dict, file_path)
 
     @classmethod
     def group_validation(cls, answers, current):
@@ -45,24 +59,21 @@ class Groups:
         print(f"{'Group Name:':20}{'Days Between Contact:'}")
         for group, days in groups_dict.items():
             print(f"{group:20}{days} days")
+        input("Press Enter to Continue")
 
     @classmethod
-    def add_user_to_group(cls, contacts_dict, selected_group):
-        # select group function -> checkbox to select users to add to group -> iterate through chose users & append group to groups
+    def add_users_to_group(cls, contacts_dict, selected_group):
         message = f"Add contacts to {selected_group}"
         selected = inquirer.prompt([inquirer.Checkbox('contacts', message=message, choices=contacts_dict.keys())])
         for contact in selected['contacts']:
-            print(selected_group)
             if selected_group not in contacts_dict[contact]['groups']:
                 contacts_dict[contact]['groups'].append(selected_group)
-                print(contacts_dict[contact])
 
 
 user_data = File.load_data('client.json')
 username = 'test'
 groups_dict = user_data[username]['groups_dict']  #<- select using keys
 contacts_dict = user_data[username]['contacts']
+file_path = 'client.json'
 
-Groups.add_user_to_group(contacts_dict, Groups.select_group(groups_dict))
-
-File.save_to_file('client.json', user_data)
+Groups.groups_menu(user_data, groups_dict, file_path)
