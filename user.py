@@ -4,10 +4,21 @@ import inquirer
 class User:
     user_options = ["Login", "Create User"]
 
+    @staticmethod
+    def user_menu(user_data):
+        #clear screen
+        options = inquirer.prompt([inquirer.List('choice', message="WELCOME TO THE APP!!!", choices=User.user_options)])
+        if options['choice'] == 'Login':
+            user = User.login(user_data)
+        else:
+            User.create_user(user_data)
+            File.save_to_file('client.json', user_data)
+            User.user_menu(user_data)
+
     @classmethod
-    def login(self, user_data):
+    def login(cls, user_data):
         def username_validation(answers, current):
-            if not user_data.get(current, True):
+            if not user_data.get(current, False):
                 raise errors.ValidationError('', reason="Invalid username.")
             return True
         def password_validation(answers, current):
@@ -18,7 +29,7 @@ class User:
         user = inquirer.prompt([inquirer.Text('username', message="Enter username", validate=username_validation), inquirer.Password('password', message="Enter Password", validate=password_validation)])
 
     @classmethod
-    def create_user(self, user_data):
+    def create_user(cls, user_data):
         def username_validation(answers, current):
             if user_data.get(current, False):
                 raise errors.ValidationError('', reason="Username already in use.")
@@ -39,10 +50,5 @@ user_data = File.load_data('client.json')
 # new.create_user(user_data)
 
 # user = User()
-options = inquirer.prompt([inquirer.List('choice', message="WELCOME TO THE APP!!!", choices=User.user_options)])
-if options['choice'] == 'Login':
-    user = User.login(user_data)
-else:
-    User.create_user(user_data)
-    File.save_to_file('client.json', user_data)
-    # options
+
+User.user_menu(user_data)
