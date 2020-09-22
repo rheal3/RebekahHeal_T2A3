@@ -8,11 +8,11 @@ class ManageContacts: #subclass of contact??
     manage_contacts_options = ['Add Contact', 'Edit Contact', 'View Contact', 'View All Contacts', 'Logout']
 
     @staticmethod
-    def manage_contacts_menu(user_data, contacts_list, groups, file_path):
+    def manage_contacts_menu(user_data, contacts_list, groups_list, file_path):
         if len(contacts_list) > 0:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=ManageContacts.manage_contacts_options)])
             if options['choice'] == 'Add Contact':
-                ManageContacts.add_contact(contacts_list, groups)
+                ManageContacts.add_contact(contacts_list, groups_list)
                 File.save_to_file(file_path, user_data)
             elif options['choice'] == 'Edit Contact':
                 ManageContacts.edit_contact(ManageContacts.select_contact(contacts_list), contacts_list)
@@ -29,13 +29,13 @@ class ManageContacts: #subclass of contact??
         else:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=['Add Contact', 'Logout'])])
             if options['choice'] == 'Add Contact':
-                ManageContacts.add_contact(contacts_list, groups)
+                ManageContacts.add_contact(contacts_list, groups_list)
                 File.save_to_file(file_path, user_data)
             elif options['choice'] == 'Logout':
                 print("Goodbye.")
                 exit()
         # add screen clear
-        ManageContacts.manage_contacts_menu(user_data, contacts_list, groups, file_path)
+        ManageContacts.manage_contacts_menu(user_data, contacts_list, groups_list, file_path)
 
     @classmethod
     def email_validation(cls, answers, current):
