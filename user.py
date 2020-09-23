@@ -1,5 +1,6 @@
 from file import File
 import inquirer
+from manage_contacts import ManageContacts
 
 class User:
     user_options = ["Login", "Create User"]
@@ -54,6 +55,18 @@ class User:
         new_user = inquirer.prompt([inquirer.Text('username', message="Enter Username", validate=username_validation), inquirer.Password('initial_password', message="Enter Password"), inquirer.Password('validated_password', message="Re-Enter Password", validate=password_validation)])
 
         user_data[new_user['username'].lower()] = {'password': new_user['validated_password'], 'contacts': {}, 'groups_dict': {}}
+
+    @staticmethod
+    def main_menu(user_data, contacts_dict, groups_dict, file_path):
+        options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Follow Up', 'Logout'])])
+        if options['choice'] == 'Manage Contacts':
+            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
+        elif options['choice'] == 'Follow Up':
+            print("FOLLOW UP FUNCTIONALITY HERE!")
+        elif options['choice'] == 'Logout':
+            print("Goodbye.")
+            exit()
+
 
 
 # user_data = File.load_data('client.json')

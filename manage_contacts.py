@@ -6,7 +6,7 @@ from file import File
 
 
 class ManageContacts: #subclass of contact??
-    manage_contacts_options = ['Add Contact', 'Edit Contact', 'View Contact', 'View All Contacts', 'Logout']
+    manage_contacts_options = ['Add Contact', 'Edit Contact', 'View Contact', 'View All Contacts', 'Go Back']
 
     @staticmethod
     def manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path):
@@ -26,9 +26,10 @@ class ManageContacts: #subclass of contact??
         elif options['choice'] == 'View All Contacts':
             ManageContacts.view_all_contacts(contacts_dict)
             input("Press Enter to Continue")
-        elif options['choice'] == 'Logout':
-            print("Goodbye.")
-            exit()
+        elif options['choice'] == 'Go Back':
+            from user import User
+            User.main_menu(user_data, contacts_dict, groups_dict, file_path)
+
         # add screen clear
         ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
 

@@ -56,8 +56,6 @@ class Groups:
                 if selected_group in contacts_dict[contact]['groups']:
                     contacts_dict[contact]['groups'].remove(selected_group)
                     contacts_dict[contact]['groups'].append(edit['name'])
-                    print(edit['name'])
-                    print(edit['name'].lower())
         elif edit['field'] == 'Days Between Contact':
             edit = inquirer.prompt([inquirer.Text('days', message='Enter new days between contact', validate=Groups.day_validation)])
             groups_dict[selected_group] = edit['days']
