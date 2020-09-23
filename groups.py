@@ -2,7 +2,7 @@ import inquirer
 from file import File
 
 class Groups:
-    groups_options = ['Add Group', 'Edit Group', 'View All Groups', 'Add Users To Group'] # return to main option
+    groups_options = ['Add Group', 'Edit Group', 'View All Groups', 'Add Users To Group', 'Go Back'] # return to main option
     @staticmethod
     def groups_menu(user_data, groups_dict, file_path, contacts_dict):
         options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=Groups.groups_options)])
@@ -17,6 +17,9 @@ class Groups:
         elif options['choice'] == 'Add Users To Group':
             Groups.add_users_to_group(contacts_dict, Groups.select_group(groups_dict))
             File.save_to_file(file_path, user_data)
+        elif options['choice'] == 'Go Back':
+            from manage_contacts import ManageContacts
+            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
         #clear screen
         Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
 
@@ -85,5 +88,5 @@ groups_dict = user_data[username]['groups_dict']  #<- select using keys
 contacts_dict = user_data[username]['contacts']
 file_path = 'client.json'
 
-Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
+# Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
 # Groups.edit_groups(Groups.select_group(groups_dict), groups_dict, contacts_dict)
