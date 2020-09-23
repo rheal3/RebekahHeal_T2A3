@@ -58,7 +58,11 @@ class User:
 
     @staticmethod
     def main_menu(user_data, contacts_dict, groups_dict, file_path):
-        options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Follow Up', 'Logout'])])
+        if len(contacts_dict) > 0:
+            options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Follow Up', 'Logout'])])
+        else:
+            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
+            
         if options['choice'] == 'Manage Contacts':
             ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
         elif options['choice'] == 'Follow Up':
