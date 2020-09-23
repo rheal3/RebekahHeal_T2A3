@@ -38,11 +38,11 @@ class Groups:
         def group_validation(answers, current):
             if current in groups_dict.keys():
                 inquirer.ValidationError('', reason="Group name in use.")
-            current = current.lower()
+            current = current.lower() #NOT COMING OUT AS LOWER.. HOW TO CHANGE??
             return True
 
         group = inquirer.prompt([inquirer.Text('group', message="Group Name", validate=group_validation), inquirer.Text('days', message="Number Of Days Between Contact", validate=Groups.day_validation)])
-        groups_dict[group['group']] = group['days']
+        groups_dict[group['group'].lower()] = group['days']
 
     # same as select_contact <- create one function for both? where?
     @classmethod
@@ -55,7 +55,6 @@ class Groups:
         def group_validation(answers, current):
             if current in groups_dict.keys():
                 inquirer.ValidationError('', reason="Group name in use.")
-            current = current.lower()
             return True
 
         edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['Group Name', 'Days Between Contact'])])
