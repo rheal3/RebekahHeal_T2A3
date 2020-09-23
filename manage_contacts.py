@@ -6,7 +6,7 @@ from groups import Groups
 
 
 class ManageContacts: #subclass of contact??
-    manage_contacts_options = ['Add Contact', 'Edit Contact', 'View Contact', 'View All Contacts', 'Manage Groups', 'Go Back']
+    manage_contacts_options = ['Add Contact', 'Edit Contact', 'View Contact', 'View All Contacts', 'Go Back']
 
     @staticmethod
     def manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path):
@@ -26,8 +26,6 @@ class ManageContacts: #subclass of contact??
         elif options['choice'] == 'View All Contacts':
             ManageContacts.view_all_contacts(contacts_dict)
             input("Press Enter to Continue")
-        elif options['choice'] == 'Manage Groups':
-            Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict, file_path)

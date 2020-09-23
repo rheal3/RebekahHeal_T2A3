@@ -1,6 +1,7 @@
 from file import File
 import inquirer
 from manage_contacts import ManageContacts
+from groups import Groups
 
 class User:
     user_options = ["Login", "Create User"]
@@ -59,12 +60,14 @@ class User:
     @staticmethod
     def main_menu(user_data, contacts_dict, groups_dict, file_path):
         if len(contacts_dict) > 0:
-            options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Follow Up', 'Logout'])])
+            options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Manage Groups', 'Follow Up', 'Logout'])])
         else:
             ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
             
         if options['choice'] == 'Manage Contacts':
             ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
+        elif options['choice'] == 'Manage Groups':
+            Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
         elif options['choice'] == 'Follow Up':
             print("FOLLOW UP FUNCTIONALITY HERE!")
         elif options['choice'] == 'Logout':

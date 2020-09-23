@@ -1,12 +1,16 @@
-from file import File # remove later
+from file import File # remove later, just for testing :)
 import inquirer
 from manage_contacts import ManageContacts
 from datetime import datetime, timedelta, date
 from termcolor import cprint
 
 class FollowUp:
+    @staticmethod
+    def follow_up_menu():
+        pass
+
     @classmethod
-    def set_dates(cls, selected_contact, groups_dict): #Call within follow up function to get next date..
+    def set_dates(cls, selected_contact, groups_dict): #Call within follow up function to get next date.. after follow up :)
         if len(selected_contact['groups']) > 0:
             nearest_contact = min([int(groups_dict[group]) for group in selected_contact['groups']])
             selected_contact['follow_up']['last_contact'] = datetime.today().strftime("%Y-%m-%d")
@@ -25,7 +29,7 @@ class FollowUp:
         all_contacts = {contact:details['follow_up']['next_contact'] for contact, details in contacts_dict.items()}
         contact_dates = [date for contact, date in all_contacts.items()]
         done = []
-        
+
         print(f"{'Name:':20}{'Next Contact Date:'}")
         while len(all_contacts) != len(done):
             min_date = min(contact_dates)

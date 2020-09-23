@@ -22,8 +22,9 @@ class Groups:
             Groups.add_users_to_group(contacts_dict, Groups.select_group(groups_dict))
             File.save_to_file(file_path, user_data)
         elif options['choice'] == 'Go Back':
-            from manage_contacts import ManageContacts
-            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
+            from user import User
+            User.main_menu(user_data, contacts_dict, groups_dict, file_path)
+    
         #clear screen
         Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
 
