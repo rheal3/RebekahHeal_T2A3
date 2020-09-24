@@ -13,4 +13,5 @@ groups_list = user_data[current_user]['groups_dict'].keys() # import from groups
 groups_dict = user_data[current_user]['groups_dict']
 
 
+
 User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)

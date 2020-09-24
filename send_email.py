@@ -1,10 +1,12 @@
 import pickle
 import os.path
+import time
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from email.mime.text import MIMEText
 import base64
+
 
 class SendEmail:
 
@@ -42,11 +44,14 @@ class SendEmail:
         return {'raw': raw_message.decode("utf-8")}
 
     @classmethod
-    def send_message(cls, service, message, user_id='me'):
+    def send_message(cls, message, current_user, user_id='me'):
+        service = build('gmail', 'v1', credentials=SendEmail.get_credentials(current_user))
+
         try:
             message = service.users().messages().send(userId=user_id, body=message).execute()
             # print(f"Message Id: {message['id']}")
             print("Message sent.")
+            time.sleep(1.5)
             return message
         except Exception:
             print("Unable to send message.")

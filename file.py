@@ -1,4 +1,5 @@
 import json
+import time
 
 class File:
 
@@ -8,6 +9,7 @@ class File:
             json_data = json.dumps(data)
             save_file.write(json_data)
         print("Data Saved.")
+        time.sleep(1)
 
     @classmethod
     def load_data(cls, file_path):

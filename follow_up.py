@@ -5,17 +5,21 @@ from manage_contacts import ManageContacts
 from datetime import datetime, timedelta, date
 from termcolor import cprint
 from send_email import SendEmail
+import os
 
 class FollowUp:
     @staticmethod
     def follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path):
+        os.system('clear')
         options = inquirer.prompt([inquirer.List('choice', message="Choose Option", choices=['View Follow Up', 'Follow Up By Email', 'Go Back'])])
+
+        os.system('clear')
         if options['choice'] == 'View Follow Up':
             # clear screen
             FollowUp.view_follow_up(contacts_dict)
             input("Press Enter to continue")
         elif options['choice'] == 'Follow Up By Email':
-            FollowUp.send_email(current_user)
+            FollowUp.send_email(current_user, contacts_dict)
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
@@ -34,6 +38,7 @@ class FollowUp:
 
     @classmethod
     def view_follow_up(cls, contacts_dict):
+        os.system('clear')
         def days_between(date):
             today = datetime.today()
             date = datetime.strptime(date, "%Y-%m-%d")
@@ -70,7 +75,7 @@ class FollowUp:
         return "\n".join(contents)
 
     @classmethod
-    def send_email(cls, current_user):
+    def send_email(cls, current_user, contacts_dict):
         to = ManageContacts.select_contact(contacts_dict)
         subject = inquirer.text(message="Enter email subject")
         message_text = FollowUp.get_email_contents()
@@ -78,8 +83,6 @@ class FollowUp:
         print(f"\nSubject: {subject}\n\n{message_text}\n")
         send = inquirer.confirm("Are you sure you want to send?", default=False)
         if send:
-            SendEmail.send_message(service, SendEmail.create_message(to['email'], subject, message_text))
-            print(to)
-            # FollowUp.set_dates(to['name'], groups_dict)
+            SendEmail.send_message(SendEmail.create_message(to['email'], subject, message_text), current_user)
         else:
             print("Message deleted.")

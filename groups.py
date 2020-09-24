@@ -1,15 +1,18 @@
 import inquirer
 from file import File
+import os
 
 class Groups:
     groups_options = ['Add Group', 'Edit Group', 'View All Groups', 'Add Users To Group', 'Go Back'] # return to main option
     @staticmethod
     def groups_menu(user_data, groups_dict, file_path, contacts_dict, current_user):
+        os.system('clear')
         if len(groups_dict) > 0:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=Groups.groups_options)])
         else:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=['Add Group', 'Go Back'])])
 
+        os.system('clear')
         if options['choice'] == 'Add Group':
             Groups.add_group(groups_dict)
             File.save_to_file(file_path, user_data)
@@ -19,7 +22,7 @@ class Groups:
         elif options['choice'] == 'View All Groups':
             Groups.view_all_groups(groups_dict, contacts_dict)
         elif options['choice'] == 'Add Users To Group':
-            Groups.add_users_to_group(contacts_dict, Groups.select_group(groups_dict))
+            Groups.add_contacts_to_group(contacts_dict, Groups.select_group(groups_dict))
             File.save_to_file(file_path, user_data)
         elif options['choice'] == 'Go Back':
             from user import User
@@ -58,8 +61,10 @@ class Groups:
                 inquirer.ValidationError('', reason="Group name in use.")
             return True
 
+        os.system('clear')
         edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['Group Name', 'Days Between Contact'])])
 
+        os.system('clear')
         if edit['field'] == 'Group Name':
             edit = inquirer.prompt([inquirer.Text('name', message='Enter new group name', validate=group_validation)])
             edit['name'] = edit['name'].lower()
@@ -83,7 +88,8 @@ class Groups:
         input("Press Enter to Continue")
 
     @classmethod
-    def add_users_to_group(cls, contacts_dict, selected_group):
+    def add_contacts_to_group(cls, contacts_dict, selected_group):
+        os.system('clear')
         message = f"Add contacts to {selected_group}"
         selected = inquirer.prompt([inquirer.Checkbox('contacts', message=message, choices=contacts_dict.keys())])
         for contact in selected['contacts']:

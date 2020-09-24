@@ -3,6 +3,7 @@ import re
 from contact import Contact
 from file import File
 from groups import Groups
+import os
 
 
 class ManageContacts: #subclass of contact??
@@ -10,10 +11,13 @@ class ManageContacts: #subclass of contact??
 
     @staticmethod
     def manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user):
+        os.system('clear')
         if len(contacts_dict) > 0:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=ManageContacts.manage_contacts_options)])
         else:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=['Add Contact', 'Logout'])])
+
+        os.system('clear')
         if options['choice'] == 'Add Contact':
             ManageContacts.add_contact(contacts_dict, groups_dict)
             File.save_to_file(file_path, user_data)
@@ -29,8 +33,10 @@ class ManageContacts: #subclass of contact??
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
+        elif options['choice'] == 'Logout':
+            print("Goodbye.")
+            exit()
 
-        # add screen clear
         ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
 
     @classmethod
@@ -84,6 +90,7 @@ class ManageContacts: #subclass of contact??
 
     @classmethod
     def view_individual_contact(self, contact):
+        os.system('clear')
         print(f"Name: {contact['name']}\nEmail: {contact['email']}\nPhone: {contact['phone']}\nGroups: {contact['groups']}")
 
     @classmethod
