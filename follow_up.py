@@ -1,13 +1,20 @@
 from file import File # remove later, just for testing :)
+from googleapiclient.discovery import build # remove after testing.
 import inquirer
 from manage_contacts import ManageContacts
 from datetime import datetime, timedelta, date
 from termcolor import cprint
+from send_email import SendEmail
 
 class FollowUp:
     @staticmethod
     def follow_up_menu():
-        pass
+        options = inquirer.prompt([inquirer.List('choice', message="Choose Option", choices=['View Follow Up', 'Follow Up By Email'])])
+        if options['choice'] == 'View Follow Up':
+            FollowUp.view_follow_up(contacts_dict)
+        elif options['choice'] == 'Follow Up By Email':
+            pass
+
 
     @classmethod
     def set_dates(cls, selected_contact, groups_dict): #Call within follow up function to get next date.. after follow up :)
@@ -44,6 +51,34 @@ class FollowUp:
                     done.append(contact)
                     contact_dates.remove(min_date)
 
+    @classmethod
+    def get_email_contents(cls):
+        print("Enter/Paste email content. Use Ctrl-D to save.")
+        contents = []
+        while True:
+            try:
+                line = input()
+            except EOFError:
+                break
+            contents.append(line)
+        return "\n".join(contents)
+
+    @classmethod
+    def send_email(cls, current_user):
+        to = ManageContacts.select_contact(contacts_dict)['email']
+        subject = inquirer.text(message="Enter email subject")
+        message_text = FollowUp.get_email_contents()
+        # clear screen
+        print(f"\n{message_text}\n")
+        send = inquirer.confirm("Are you sure you want to send?", default=False)
+        if send:
+            SendEmail.send_message(service, SendEmail.create_message(to, subject, message_text))
+        else:
+            print("Message deleted.")
+
+
+
+
 
 # last_follow_up = user_data[username][contact<-select_contact][last_contact]
 
@@ -55,7 +90,12 @@ contacts_dict = user_data[current_user]['contacts']
 
 groups_list = user_data[current_user]['groups_dict'].keys() # import from groups function
 groups_dict = user_data[current_user]['groups_dict']
+service = build('gmail', 'v1', credentials=SendEmail.get_credentials(current_user))
 
-FollowUp.set_dates(ManageContacts.select_contact(contacts_dict), groups_dict)
-File.save_to_file(file_path,user_data)
-FollowUp.view_follow_up(contacts_dict)
+
+# FollowUp.set_dates(ManageContacts.select_contact(contacts_dict), groups_dict)
+# File.save_to_file(file_path,user_data)
+# FollowUp.view_follow_up(contacts_dict)
+# email_contents = FollowUp.get_email_contents()
+# print(email_contents)
+FollowUp.send_email(current_user)
