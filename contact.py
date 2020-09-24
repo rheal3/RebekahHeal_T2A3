@@ -1,7 +1,7 @@
 #Instantiate contact
 class Contact:
     """create contact info"""
-    def __init__(self, firstname, lastname, email, phone, groups):
+    def __init__(self, firstname, lastname, email, phone, groups=[]):
         self.firstname = firstname.capitalize()
         self.lastname = lastname.capitalize()
         self.fullname = self.firstname + " " + self.lastname

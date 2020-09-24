@@ -95,6 +95,6 @@ class ManageContacts: #subclass of contact??
 
     @classmethod
     def view_all_contacts(self, contacts_dict):
-        print(f"{'Name:':25}{'Email:':35}{'Phone:':20}{'Groups:':20}")
+        print(f"{'Name:':25}{'Email:':30}{'Phone:':18}{'Groups:'}")
         for contact, details in contacts_dict.items():
-            print(f"{details['name']:25}{details['email']:35}{details['phone']:20}{details['groups']}")
+            print(f"{details['name']:25}{details['email']:30}{details['phone']:18}{details['groups']}")

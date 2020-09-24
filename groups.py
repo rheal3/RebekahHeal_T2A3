@@ -22,13 +22,12 @@ class Groups:
         elif options['choice'] == 'View All Groups':
             Groups.view_all_groups(groups_dict, contacts_dict)
         elif options['choice'] == 'Add Users To Group':
-            Groups.add_contacts_to_group(contacts_dict, Groups.select_group(groups_dict))
+            Groups.add_contacts_to_group(contacts_dict, Groups.select_group(groups_dict), groups_dict)
             File.save_to_file(file_path, user_data)
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
 
-        #clear screen
         Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict, current_user)
 
     @classmethod
@@ -62,7 +61,7 @@ class Groups:
             return True
 
         os.system('clear')
-        edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['Group Name', 'Days Between Contact'])])
+        edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['Group Name', 'Days Between Contact', 'Remove Group'])])
 
         os.system('clear')
         if edit['field'] == 'Group Name':
@@ -76,6 +75,12 @@ class Groups:
         elif edit['field'] == 'Days Between Contact':
             edit = inquirer.prompt([inquirer.Text('days', message='Enter new days between contact', validate=Groups.day_validation)])
             groups_dict[selected_group] = edit['days']
+        elif edit['field'] == 'Remove Group':
+            check = inquirer.confirm("Are you sure you want to delete?", default=False)
+            if check:
+                del groups_dict[selected_group]
+                print("Deleted.")
+
 
     @classmethod
     def view_all_groups(cls, groups_dict, contacts_dict):
@@ -88,10 +93,12 @@ class Groups:
         input("Press Enter to Continue")
 
     @classmethod
-    def add_contacts_to_group(cls, contacts_dict, selected_group):
+    def add_contacts_to_group(cls, contacts_dict, selected_group, groups_dict):
         os.system('clear')
         message = f"Add contacts to {selected_group}"
         selected = inquirer.prompt([inquirer.Checkbox('contacts', message=message, choices=contacts_dict.keys())])
         for contact in selected['contacts']:
             if selected_group not in contacts_dict[contact]['groups']:
                 contacts_dict[contact]['groups'].append(selected_group)
+                from follow_up import FollowUp
+                FollowUp.set_dates(contacts_dict[contact], groups_dict)

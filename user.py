@@ -67,12 +67,15 @@ class User:
         else:
             ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
 
-        os.system('clear')
+
         if options['choice'] == 'Manage Contacts':
+            os.system('clear')
             ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
         elif options['choice'] == 'Manage Groups':
+            os.system('clear')
             Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict, current_user)
         elif options['choice'] == 'Follow Up':
+            os.system('clear')
             FollowUp.follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path)
         elif options['choice'] == 'Logout':
             print("Goodbye.")
