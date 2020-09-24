@@ -32,7 +32,6 @@ class FollowUp:
             nearest_contact = min([int(groups_dict[group]) for group in selected_contact['groups']])
             selected_contact['follow_up']['last_contact'] = datetime.today().strftime("%Y-%m-%d")
             selected_contact['follow_up']['next_contact'] = (datetime.today() + timedelta(days=nearest_contact)).strftime("%Y-%m-%d")
-            print(selected_contact)
         else:
             print("Add contact to group to set next follow up date.")
 
@@ -54,6 +53,8 @@ class FollowUp:
                 for contact, date in all_contacts.items():
                     if date == '':
                         print(f"{contact:20}-")
+                        done.append(contact)
+                        continue
                     elif date == min_date and contact not in done:
                         if days_between(date) <= 1:
                             cprint(f"{contact:20}{date}", 'red')
@@ -62,8 +63,7 @@ class FollowUp:
                         else:
                             print(f"{contact:20}{date}")
                         contact_dates.remove(min_date)
-                    done.append(contact)
-
+                        done.append(contact)
         else:
             print("Add contacts to groups to view follow up dates.")
 
