@@ -4,7 +4,7 @@ import inquirer
 from manage_contacts import ManageContacts
 from datetime import datetime, timedelta, date
 from termcolor import cprint
-from send_email import SendEmail
+from email_setup import EmailSetup
 import os
 
 class FollowUp:
@@ -41,21 +41,17 @@ class FollowUp:
         def days_between(date):
             today = datetime.today()
             date = datetime.strptime(date, "%Y-%m-%d")
-            return abs((date - today).days)
+            return (date - today).days
 
         all_contacts = {contact:details['follow_up']['next_contact'] for contact, details in contacts_dict.items()}
         contact_dates = [date for contact, date in all_contacts.items() if date != '']
-        done = []
+        done = [date for contact, date in all_contacts.items() if date == '']
         if len(contact_dates) > 0:
             print(f"{'Name:':20}{'Next Contact Date:'}")
             while len(all_contacts) != len(done):
                 min_date = min(contact_dates)
                 for contact, date in all_contacts.items():
-                    if date == '':
-                        print(f"{contact:20}-")
-                        done.append(contact)
-                        continue
-                    elif date == min_date and contact not in done:
+                    if date == min_date and contact not in done:
                         if days_between(date) <= 1:
                             cprint(f"{contact:20}{date}", 'red')
                         elif days_between(date) <= 3:
@@ -64,6 +60,10 @@ class FollowUp:
                             print(f"{contact:20}{date}")
                         contact_dates.remove(min_date)
                         done.append(contact)
+            for contact, date in all_contacts.items():
+                if date == '' and contact not in done:
+                    print(f"{contact:20}-")
+                    done.append(contact)
         else:
             print("Add contacts to groups to view follow up dates.")
 
@@ -89,6 +89,6 @@ class FollowUp:
         print(f"\nSubject: {subject}\n\n{message_text}\n")
         send = inquirer.confirm("Are you sure you want to send?", default=False)
         if send:
-            SendEmail.send_message(SendEmail.create_message(to['email'], subject, message_text), current_user)
+            EmailSetup.send_message(EmailSetup.create_message(to['email'], subject, message_text), current_user)
         else:
             print("Message deleted.")

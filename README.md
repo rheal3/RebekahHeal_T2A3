@@ -5,6 +5,9 @@
 
 ## Installation Steps
 
+{recommended to use virtual environment}
+pip install --upgrade pip
+pip3 install -r requirements.txt
 
 ## Software Development Plan
 

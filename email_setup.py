@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 import base64
 
 
-class SendEmail:
+class EmailSetup:
 
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/gmail.send']
@@ -26,7 +26,7 @@ class SendEmail:
             if credentials and credentials.expired and credentials.refresh_token:
                 credentials.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SendEmail.SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', EmailSetup.SCOPES)
                 credentials = flow.run_local_server(port=0)
 
             with open(token_file, 'wb') as token:
@@ -45,7 +45,7 @@ class SendEmail:
 
     @classmethod
     def send_message(cls, message, current_user, user_id='me'):
-        service = build('gmail', 'v1', credentials=SendEmail.get_credentials(current_user))
+        service = build('gmail', 'v1', credentials=EmailSetup.get_credentials(current_user))
 
         try:
             message = service.users().messages().send(userId=user_id, body=message).execute()
