@@ -1,5 +1,5 @@
-from file import File # remove later, just for testing :)
-from googleapiclient.discovery import build # remove after testing.
+# from file import File # remove later, just for testing :)
+# from googleapiclient.discovery import build # remove after testing.
 import inquirer
 from manage_contacts import ManageContacts
 from datetime import datetime, timedelta, date
@@ -8,7 +8,7 @@ from send_email import SendEmail
 
 class FollowUp:
     @staticmethod
-    def follow_up_menu(contacts_dict, current_user):
+    def follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path):
         options = inquirer.prompt([inquirer.List('choice', message="Choose Option", choices=['View Follow Up', 'Follow Up By Email', 'Go Back'])])
         if options['choice'] == 'View Follow Up':
             # clear screen
@@ -19,7 +19,7 @@ class FollowUp:
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
-        FollowUp.follow_up_menu(contacts_dict, current_user)
+        FollowUp.follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path)
 
 
     @classmethod
@@ -83,27 +83,3 @@ class FollowUp:
             # FollowUp.set_dates(to['name'], groups_dict)
         else:
             print("Message deleted.")
-
-
-
-
-
-# last_follow_up = user_data[username][contact<-select_contact][last_contact]
-
-file_path = 'client.json'
-user_data = File.load_data(file_path)
-current_user = 'test'
-
-contacts_dict = user_data[current_user]['contacts']
-
-groups_list = user_data[current_user]['groups_dict'].keys() # import from groups function
-groups_dict = user_data[current_user]['groups_dict']
-service = build('gmail', 'v1', credentials=SendEmail.get_credentials(current_user))
-
-
-# FollowUp.set_dates(ManageContacts.select_contact(contacts_dict), groups_dict)
-# File.save_to_file(file_path,user_data)
-# FollowUp.view_follow_up(contacts_dict)
-# email_contents = FollowUp.get_email_contents()
-# print(email_contents)
-# FollowUp.send_email(current_user)

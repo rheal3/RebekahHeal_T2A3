@@ -4,7 +4,7 @@ from file import File
 class Groups:
     groups_options = ['Add Group', 'Edit Group', 'View All Groups', 'Add Users To Group', 'Go Back'] # return to main option
     @staticmethod
-    def groups_menu(user_data, groups_dict, file_path, contacts_dict):
+    def groups_menu(user_data, groups_dict, file_path, contacts_dict, current_user):
         if len(groups_dict) > 0:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=Groups.groups_options)])
         else:
@@ -23,10 +23,10 @@ class Groups:
             File.save_to_file(file_path, user_data)
         elif options['choice'] == 'Go Back':
             from user import User
-            User.main_menu(user_data, contacts_dict, groups_dict, file_path)
-    
+            User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
+
         #clear screen
-        Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
+        Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict, current_user)
 
     @classmethod
     def day_validation(cls,answers, current):

@@ -9,7 +9,7 @@ class ManageContacts: #subclass of contact??
     manage_contacts_options = ['Add Contact', 'Edit Contact', 'View Contact', 'View All Contacts', 'Go Back']
 
     @staticmethod
-    def manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path):
+    def manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user):
         if len(contacts_dict) > 0:
             options = inquirer.prompt([inquirer.List('choice', message="Select Option", choices=ManageContacts.manage_contacts_options)])
         else:
@@ -28,10 +28,10 @@ class ManageContacts: #subclass of contact??
             input("Press Enter to Continue")
         elif options['choice'] == 'Go Back':
             from user import User
-            User.main_menu(user_data, contacts_dict, groups_dict, file_path)
+            User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
 
         # add screen clear
-        ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
+        ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
 
     @classmethod
     def email_validation(cls, answers, current):

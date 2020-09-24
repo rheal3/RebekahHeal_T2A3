@@ -63,19 +63,14 @@ class User:
         if len(contacts_dict) > 0:
             options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Manage Groups', 'Follow Up', 'Logout'])])
         else:
-            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
+            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
 
         if options['choice'] == 'Manage Contacts':
-            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path)
+            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
         elif options['choice'] == 'Manage Groups':
-            Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict)
+            Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict, current_user)
         elif options['choice'] == 'Follow Up':
-            FollowUp.follow_up_menu(contacts_dict, current_user)
+            FollowUp.follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path)
         elif options['choice'] == 'Logout':
             print("Goodbye.")
             exit()
-
-
-
-# user_data = File.load_data('client.json')
-# current_user = User.user_menu(user_data)
