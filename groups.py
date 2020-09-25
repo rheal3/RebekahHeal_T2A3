@@ -39,9 +39,10 @@ class Groups:
     @classmethod
     def add_group(cls, groups_dict):
         def group_validation(answers, current):
-            if current in groups_dict.keys():
+            if current.lower() in groups_dict.keys():
                 inquirer.ValidationError('', reason="Group name in use.")
-            current = current.lower() #NOT COMING OUT AS LOWER.. HOW TO CHANGE??
+            if len(current.strip()) == 0:
+                inquirer.ValidationError('', reason="Invalid group name.")
             return True
 
         group = inquirer.prompt([inquirer.Text('group', message="Group Name", validate=group_validation), inquirer.Text('days', message="Number Of Days Between Contact", validate=Groups.day_validation)])
