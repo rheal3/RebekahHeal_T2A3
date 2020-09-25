@@ -19,7 +19,7 @@ class FollowUp:
             FollowUp.view_follow_up(contacts_dict)
             input("Press Enter to continue")
         elif options['choice'] == 'Follow Up By Email':
-            FollowUp.send_email(current_user, contacts_dict)
+            FollowUp.send_email(current_user, contacts_dict, groups_dict)
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
@@ -47,7 +47,7 @@ class FollowUp:
         contact_dates = [date for contact, date in all_contacts.items() if date != '']
         done = [date for contact, date in all_contacts.items() if date == '']
         if len(contact_dates) > 0:
-            print(f"{'Name:':20}{'Next Contact Date:'}")
+            print(f"\033[1m{'Name:':20}{'Next Contact Date:'}\033[0m")
             while len(all_contacts) != len(done):
                 min_date = min(contact_dates)
                 for contact, date in all_contacts.items():
@@ -57,7 +57,7 @@ class FollowUp:
                         elif days_between(date) <= 3:
                             cprint(f"{contact:20}{date}", 'yellow')
                         else:
-                            print(f"{contact:20}{date}")
+                            cprint(f"{contact:20}{date}", 'green')
                         contact_dates.remove(min_date)
                         done.append(contact)
             for contact, date in all_contacts.items():
@@ -80,7 +80,7 @@ class FollowUp:
         return "\n".join(contents)
 
     @classmethod
-    def send_email(cls, current_user, contacts_dict):
+    def send_email(cls, current_user, contacts_dict, groups_dict):
         to = ManageContacts.select_contact(contacts_dict)
         subject = inquirer.text(message="Enter email subject")
         message_text = FollowUp.get_email_contents()
@@ -90,5 +90,6 @@ class FollowUp:
         send = inquirer.confirm("Are you sure you want to send?", default=False)
         if send:
             EmailSetup.send_message(EmailSetup.create_message(to['email'], subject, message_text), current_user)
+            FollowUp.set_dates(to, groups_dict)
         else:
             print("Message deleted.")

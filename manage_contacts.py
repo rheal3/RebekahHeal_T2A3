@@ -22,8 +22,11 @@ class ManageContacts: #subclass of contact??
             ManageContacts.add_contact(contacts_dict, groups_dict)
             File.save_to_file(file_path, user_data)
         elif options['choice'] == 'Edit Contact':
-            ManageContacts.edit_contact(ManageContacts.select_contact(contacts_dict), contacts_dict, groups_dict)
+            edit = ManageContacts.edit_contact(ManageContacts.select_contact(contacts_dict), contacts_dict, groups_dict)
             File.save_to_file(file_path, user_data)
+            from follow_up import FollowUp
+            FollowUp.set_dates(edit, groups_dict)
+
         elif options['choice'] == 'View Contact':
             ManageContacts.view_individual_contact(ManageContacts.select_contact(contacts_dict))
             input("Press Enter to Continue")
@@ -86,11 +89,12 @@ class ManageContacts: #subclass of contact??
             contacts_dict[contact['name']]['phone'] = edit['phone']
         elif edit['field'] == 'groups':
             edit = inquirer.prompt([inquirer.Checkbox('groups', message='Choose groups', choices=groups_dict.keys())])
-            contacts_dict[contact['name']]['groups'] = [edit['groups']]
+            contacts_dict[contact['name']]['groups'] = edit['groups']
         elif edit['field'] == 'Remove Contact':
             check = inquirer.confirm("Are you sure you want to delete?", default=False)
             if check:
                 del contacts_dict[contact['name']]
+        return contact
 
     @classmethod
     def view_individual_contact(self, contact):
@@ -99,6 +103,6 @@ class ManageContacts: #subclass of contact??
 
     @classmethod
     def view_all_contacts(self, contacts_dict):
-        print(f"{'Name:':25}{'Email:':30}{'Phone:':18}{'Groups:'}")
+        print(f"\033[1m{'Name:':25}{'Email:':30}{'Phone:':18}{'Groups:'}\033[0m")
         for contact, details in contacts_dict.items():
             print(f"{details['name']:25}{details['email']:30}{details['phone']:18}{details['groups']}")

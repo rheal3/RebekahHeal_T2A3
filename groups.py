@@ -84,7 +84,7 @@ class Groups:
 
     @classmethod
     def view_all_groups(cls, groups_dict, contacts_dict):
-        print(f"{'Group Name:':20}{'Days Between Contact:':30}{'Contacts In Group:'}")
+        print(f"\033[1m{'Group Name:':20}{'Days Between Contact:':30}{'Contacts In Group:'}\033[0m")
         for group, days in groups_dict.items():
             contact_in_group = [contact for contact, info in contacts_dict.items() if group in info['groups']]
             if len(days) == 1:

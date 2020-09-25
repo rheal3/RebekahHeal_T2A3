@@ -28,6 +28,11 @@ class User:
             user = User.user_menu(user_data, file_path)
             return user
 
+    @staticmethod
+    def hash_password(password):
+        # take in password, hash password, return hashed password <- saved to client.json as password. If hashed login password == hashed password, login..
+        pass
+
     @classmethod
     def login(cls, user_data):
         def username_validation(answers, current):
