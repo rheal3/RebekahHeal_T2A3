@@ -47,22 +47,22 @@ class FollowUp:
         contact_dates = [date for contact, date in all_contacts.items() if date != '']
         done = [date for contact, date in all_contacts.items() if date == '']
         if len(contact_dates) > 0:
-            print(f"\033[1m{'Name:':20}{'Next Contact Date:'}\033[0m")
+            print(f"\033[1m{'Name:':25}{'Next Contact Date:'}\033[0m")
             while len(all_contacts) != len(done):
                 min_date = min(contact_dates)
                 for contact, date in all_contacts.items():
                     if date == min_date and contact not in done:
                         if days_between(date) <= 1:
-                            cprint(f"{contact:20}{date}", 'red')
+                            cprint(f"{contact:25}{date}", 'red')
                         elif days_between(date) <= 3:
-                            cprint(f"{contact:20}{date}", 'yellow')
+                            cprint(f"{contact:25}{date}", 'yellow')
                         else:
-                            cprint(f"{contact:20}{date}", 'green')
+                            cprint(f"{contact:25}{date}", 'green')
                         contact_dates.remove(min_date)
                         done.append(contact)
             for contact, date in all_contacts.items():
                 if date == '' and contact not in done:
-                    print(f"{contact:20}-")
+                    print(f"{contact:25}-")
                     done.append(contact)
         else:
             print("Add contacts to groups to view follow up dates.")

@@ -3,6 +3,7 @@ from file import File
 from manage_contacts import ManageContacts
 import inquirer #take away later?
 
+# try:
 file_path = 'client.json'
 user_data = File.load_data(file_path)
 current_user = User.user_menu(user_data, file_path)
@@ -15,3 +16,5 @@ groups_dict = user_data[current_user]['groups_dict']
 
 
 User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
+# except:
+#     print("\nSomething's gone terribly wrong! Feel free to contact *such and such* for assistance.")

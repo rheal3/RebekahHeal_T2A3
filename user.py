@@ -4,6 +4,7 @@ from manage_contacts import ManageContacts
 from groups import Groups
 from follow_up import FollowUp
 import os
+import bcrypt
 
 class User:
     user_options = ["Login", "Create User"]
@@ -30,8 +31,8 @@ class User:
 
     @staticmethod
     def hash_password(password):
-        # take in password, hash password, return hashed password <- saved to client.json as password. If hashed login password == hashed password, login..
-        pass
+        return bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
+
 
     @classmethod
     def login(cls, user_data):
@@ -39,13 +40,15 @@ class User:
             if not user_data.get(current, False):
                 raise errors.ValidationError('', reason="Invalid username.")
             return True
-        def password_validation(answers, current):
-            if current != user_data[answers['username']]['password']:
-                raise errors.ValidationError('', reason="Incorrect password.")
-            return True
 
-        user = inquirer.prompt([inquirer.Text('username', message="Enter username", validate=username_validation), inquirer.Password('password', message="Enter Password", validate=password_validation)])
+        user = inquirer.prompt([inquirer.Text('username', message="Enter username", validate=username_validation)])
+        password = inquirer.prompt([inquirer.Password('password', message="Enter Password")])
+        while not bcrypt.checkpw(password['password'].encode('utf8'), user_data[user['username']]['password'].encode('utf8')):
+            print("Incorrect password.")
+            password = inquirer.prompt([inquirer.Password('password', message="Enter Password")])
         return user['username']
+
+
 
     @classmethod
     def create_user(cls, user_data):
@@ -60,9 +63,9 @@ class User:
                 raise errors.ValidationError('', reason="Passwords do not match.")
             return True
 
-        new_user = inquirer.prompt([inquirer.Text('username', message="Enter Username", validate=username_validation), inquirer.Password('initial_password', message="Enter Password"), inquirer.Password('validated_password', message="Re-Enter Password", validate=password_validation)])
+        new_user = inquirer.prompt([inquirer.Text('username', message="Enter Username", validate=username_validation), inquirer.Password('initial_password', message="Enter Password"), inquirer.Password('password', message="Re-Enter Password", validate=password_validation)])
 
-        user_data[new_user['username'].lower()] = {'password': new_user['validated_password'], 'contacts': {}, 'groups_dict': {}}
+        user_data[new_user['username']] = {'password': User.hash_password(new_user['password']), 'contacts': {}, 'groups_dict': {}}
 
     @staticmethod
     def main_menu(user_data, contacts_dict, groups_dict, file_path, current_user):

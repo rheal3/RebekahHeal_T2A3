@@ -6,7 +6,7 @@ from groups import Groups
 import os
 
 
-class ManageContacts: #subclass of contact??
+class ManageContacts:
     manage_contacts_options = ['Add Contact', 'Edit Contact', 'View Contact', 'View All Contacts', 'Go Back']
 
     @staticmethod
@@ -85,7 +85,7 @@ class ManageContacts: #subclass of contact??
             edit = inquirer.prompt([inquirer.Text('email', message='Enter new email', validate=ManageContacts.email_validation)])
             contacts_dict[contact['name']]['email'] = edit['email']
         elif edit['field'] == 'phone':
-            edit = inquirer.prompt([inquirer.Text('phone', message='Enter new phone number', validate=ManageContacts.phone_validation)])
+            edit = inquirer.prompt([inquirer.Text('phone', message='Enter new phone number (##)-##-###-###??', validate=ManageContacts.phone_validation)])
             contacts_dict[contact['name']]['phone'] = edit['phone']
         elif edit['field'] == 'groups':
             edit = inquirer.prompt([inquirer.Checkbox('groups', message='Choose groups', choices=groups_dict.keys())])
@@ -97,9 +97,9 @@ class ManageContacts: #subclass of contact??
         return contact
 
     @classmethod
-    def view_individual_contact(self, contact):
+    def view_individual_contact(self, contact: dict):
         os.system('clear')
-        print(f"Name: {contact['name']}\nEmail: {contact['email']}\nPhone: {contact['phone']}\nGroups: {contact['groups']}")
+        print(f"Name: {contact['name']}\nEmail: {contact['email']}\nPhone: {contact['phone']}\nGroups: {contact['groups']}\nLast Contact Date: {contact['follow_up']['last_contact']}")
 
     @classmethod
     def view_all_contacts(self, contacts_dict):
