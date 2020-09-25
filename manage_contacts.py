@@ -50,7 +50,7 @@ class ManageContacts:
 
     @classmethod
     def phone_validation(cls, answers, current): # how to account for international nums??
-        if not current.isnumeric() or not re.match('(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})', current):
+        if not re.match('(\d{2}[\s]??\d{4}[-]??\d{4})', current) or not current.isnumeric():
             inquirer.ValidationError('', reason='Invalid phone number.')
         return True
 
@@ -59,7 +59,7 @@ class ManageContacts:
         if len(groups_dict) > 0:
             contact_info = inquirer.prompt([inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='{firstname} {lastname} email', validate=ManageContacts.email_validation), inquirer.Text(name='phone', message='{firstname} {lastname} phone number', validate=ManageContacts.phone_validation), inquirer.Checkbox(name='groups', message='Select groups for {firstname} {lastname}', choices=[group for group in groups_dict.keys()], default=[])])
         else:
-            contact_info = inquirer.prompt([inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='{firstname} {lastname} email', validate=ManageContacts.email_validation), inquirer.Text(name='phone', message='{firstname} {lastname} phone number', validate=ManageContacts.phone_validation)])
+            contact_info = inquirer.prompt([inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='New contact email', validate=ManageContacts.email_validation), inquirer.Text(name='phone', message='New contact phone number ##########', validate=ManageContacts.phone_validation)])
 
         new_contact = Contact(**contact_info).format_data(contacts_dict)
 
@@ -85,7 +85,7 @@ class ManageContacts:
             edit = inquirer.prompt([inquirer.Text('email', message='Enter new email', validate=ManageContacts.email_validation)])
             contacts_dict[contact['name']]['email'] = edit['email']
         elif edit['field'] == 'phone':
-            edit = inquirer.prompt([inquirer.Text('phone', message='Enter new phone number (##)-##-###-###??', validate=ManageContacts.phone_validation)])
+            edit = inquirer.prompt([inquirer.Text('phone', message='Enter new phone number ##########', validate=ManageContacts.phone_validation)])
             contacts_dict[contact['name']]['phone'] = edit['phone']
         elif edit['field'] == 'groups':
             edit = inquirer.prompt([inquirer.Checkbox('groups', message='Choose groups', choices=groups_dict.keys())])
