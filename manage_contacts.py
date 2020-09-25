@@ -69,9 +69,9 @@ class ManageContacts: #subclass of contact??
     @classmethod
     def edit_contact(self, contact: dict, contacts_dict: dict, groups_dict: dict) -> None:
         if len(groups_dict) > 0:
-            edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['name', 'email', 'phone', 'groups'])])
+            edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['name', 'email', 'phone', 'groups', 'Remove Contact'])])
         else:
-            edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['name', 'email', 'phone'])])
+            edit = inquirer.prompt([inquirer.List('field', message='Choose field to edit', choices=['name', 'email', 'phone', 'Remove Contact'])])
 
         if edit['field'] == 'name':
             edit = inquirer.prompt([inquirer.Text('firstname', message='Enter new firstname'), inquirer.Text('lastname', message='Enter new lastname')])
@@ -87,6 +87,10 @@ class ManageContacts: #subclass of contact??
         elif edit['field'] == 'groups':
             edit = inquirer.prompt([inquirer.Checkbox('groups', message='Choose groups', choices=groups_dict.keys())])
             contacts_dict[contact['name']]['groups'] = [edit['groups']]
+        elif edit['field'] == 'Remove Contact':
+            check = inquirer.confirm("Are you sure you want to delete?", default=False)
+            if check:
+                del contacts_dict[contact['name']]
 
     @classmethod
     def view_individual_contact(self, contact):
