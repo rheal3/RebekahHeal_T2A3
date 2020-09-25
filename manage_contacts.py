@@ -57,7 +57,7 @@ class ManageContacts:
     @classmethod
     def add_contact(cls, contacts_dict: dict, groups_dict: dict) -> None:
         if len(groups_dict) > 0:
-            contact_info = inquirer.prompt([inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='{firstname} {lastname} email', validate=ManageContacts.email_validation), inquirer.Text(name='phone', message='{firstname} {lastname} phone number', validate=ManageContacts.phone_validation), inquirer.Checkbox(name='groups', message='Select groups for {firstname} {lastname}', choices=[group for group in groups_dict.keys()], default=[])])
+            contact_info = inquirer.prompt([inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='{firstname} {lastname} email', validate=ManageContacts.email_validation), inquirer.Text(name='phone', message='{firstname} {lastname} phone number', validate=ManageContacts.phone_validation), inquirer.Checkbox(name='groups', message='Select groups for {firstname} {lastname} \033[3m(select using > arrow key)\033[0m', choices=[group for group in groups_dict.keys()], default=[])])
         else:
             contact_info = inquirer.prompt([inquirer.Text(name='firstname', message='New contact first name'), inquirer.Text(name='lastname', message='New contact last name'), inquirer.Text(name='email', message='New contact email', validate=ManageContacts.email_validation), inquirer.Text(name='phone', message='New contact phone number ##########', validate=ManageContacts.phone_validation)])
 
@@ -88,7 +88,7 @@ class ManageContacts:
             edit = inquirer.prompt([inquirer.Text('phone', message='Enter new phone number ##########', validate=ManageContacts.phone_validation)])
             contacts_dict[contact['name']]['phone'] = edit['phone']
         elif edit['field'] == 'groups':
-            edit = inquirer.prompt([inquirer.Checkbox('groups', message='Choose groups', choices=groups_dict.keys())])
+            edit = inquirer.prompt([inquirer.Checkbox('groups', message='Choose groups \033[3m(select using > arrow key)\033[0m', choices=groups_dict.keys())])
             contacts_dict[contact['name']]['groups'] = edit['groups']
         elif edit['field'] == 'Remove Contact':
             check = inquirer.confirm("Are you sure you want to delete?", default=False)
