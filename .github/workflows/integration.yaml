@@ -20,7 +20,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run Tests
         run: |
-          python em unittest discover tests/
+          python -m unittest discover tests/
   deployment:
     needs: build
     runs-on: ubuntu-latest
@@ -36,4 +36,4 @@ jobs:
             rm -rf ###
             git clone ###
             python3.8 -m venv /home/###/###/venv
-            /home/###/###/venv/bin/pip3.8 install -r /home/###/###/requirements.txt 
+            /home/###/###/venv/bin/pip3.8 install -r /home/###/###/requirements.txt
