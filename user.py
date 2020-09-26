@@ -1,8 +1,8 @@
 from file import File
-import inquirer
 from manage_contacts import ManageContacts
 from groups import Groups
 from follow_up import FollowUp
+import inquirer
 import os
 import bcrypt
 
@@ -10,78 +10,112 @@ import bcrypt
 class User:
     user_options = ["Login", "Create User"]
 
-    @staticmethod
-    def user_menu(user_data, file_path):
+    @classmethod
+    def user_menu(cls, user_data, file_path):
         os.system('clear')
         if len(user_data) > 0:
-            options = inquirer.prompt([inquirer.List('choice', message="WELCOME TO THE APP!!!", choices=User.user_options)])
+            options = inquirer.prompt([inquirer.List('choice',
+                                      message="WELCOME TO THE APP!!!",
+                                      choices=cls.user_options)])
             if options['choice'] == 'Login':
-                user = User.login(user_data)
+                user = cls.login(user_data)
                 return user
             elif options['choice'] == 'Create User':
-                User.create_user(user_data)
+                cls.create_user(user_data)
                 File.save_to_file(file_path, user_data)
-                user = User.user_menu(user_data, file_path)
+                user = cls.user_menu(user_data, file_path)
                 return user
         else:
-            options = inquirer.prompt([inquirer.List('choice', message="WELCOME TO THE APP!!!", choices=['Create User'])])
-            User.create_user(user_data)
+            options = inquirer.prompt([inquirer.List('choice',
+                                      message="WELCOME TO THE APP!!!",
+                                      choices=['Create User'])])
+            cls.create_user(user_data)
             File.save_to_file(file_path, user_data)
-            user = User.user_menu(user_data, file_path)
+            user = cls.user_menu(user_data, file_path)
             return user
 
     @staticmethod
     def hash_password(password):
-        return bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
+        return bcrypt.hashpw(password.encode('utf8'),
+                             bcrypt.gensalt()).decode('utf8')
 
     @classmethod
     def login(cls, user_data):
         def username_validation(answers, current):
             if not user_data.get(current, False):
-                raise inquirer.errors.ValidationError('', reason="Invalid username.")
+                message = "Invalid username."
+                raise inquirer.errors.ValidationError('', reason=message)
             return True
 
-        user = inquirer.prompt([inquirer.Text('username', message="Enter username", validate=username_validation)])
-        password = inquirer.prompt([inquirer.Password('password', message="Enter Password")])
-        while not bcrypt.checkpw(password['password'].encode('utf8'), user_data[user['username']]['password'].encode('utf8')):
+        user = inquirer.prompt([inquirer.Text('username',
+                               message="Enter username",
+                               validate=username_validation)])
+        password = inquirer.prompt([inquirer.Password('password',
+                                   message="Enter Password")])
+        while not bcrypt.checkpw(password['password'].encode('utf8'),
+                                 user_data[user['username']]['password'].
+                                 encode('utf8')):
             print("Incorrect password.")
-            password = inquirer.prompt([inquirer.Password('password', message="Enter Password")])
+            password = inquirer.prompt([inquirer.Password('password',
+                                       message="Enter Password")])
         return user['username']
 
     @classmethod
     def create_user(cls, user_data):
         def username_validation(answers, current):
             if user_data.get(current, False):
-                raise inquirer.errors.ValidationError('', reason="Username already in use.")
+                message = "Username already in use."
+                raise inquirer.errors.ValidationError('', reason=message)
             current = current.lower()
             return True
 
         def password_validation(answers, current):
             if current != answers['initial_password']:
-                raise inquirer.errors.ValidationError('', reason="Passwords do not match.")
+                message = "Passwords do not match."
+                raise inquirer.errors.ValidationError('', reason=message)
             return True
 
-        new_user = inquirer.prompt([inquirer.Text('username', message="Enter Username", validate=username_validation), inquirer.Password('initial_password', message="Enter Password"), inquirer.Password('password', message="Re-Enter Password", validate=password_validation)])
+        username = inquirer.Text('username', message="Enter Username",
+                                 validate=username_validation)
+        initial = inquirer.Password('initial_password',
+                                    message="Enter Password")
+        verify = inquirer.Password('password', message="Re-Enter Password",
+                                   validate=password_validation)
 
-        user_data[new_user['username']] = {'password': User.hash_password(new_user['password']), 'contacts': {}, 'groups_dict': {}}
+        new_user = inquirer.prompt([username, initial, verify])
+
+        password = cls.hash_password(new_user['password'])
+        user_data[new_user['username']] = {'password': password,
+                                           'contacts': {}, 'groups_dict': {}}
 
     @staticmethod
-    def main_menu(user_data, contacts_dict, groups_dict, file_path, current_user):
+    def main_menu(user_data, contacts_dict, groups_dict, file_path,
+                  current_user):
         os.system('clear')
         if len(contacts_dict) > 0:
-            options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Manage Groups', 'Follow Up', 'Logout'])])
+            options = inquirer.prompt([inquirer.List('choice',
+                                      message='Choose Option',
+                                      choices=['Manage Contacts',
+                                               'Manage Groups', 'Follow Up',
+                                               'Logout'])])
         else:
-            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
+            ManageContacts.manage_contacts_menu(user_data, contacts_dict,
+                                                groups_dict, file_path,
+                                                current_user)
 
         if options['choice'] == 'Manage Contacts':
             os.system('clear')
-            ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
+            ManageContacts.manage_contacts_menu(user_data, contacts_dict,
+                                                groups_dict, file_path,
+                                                current_user)
         elif options['choice'] == 'Manage Groups':
             os.system('clear')
-            Groups.groups_menu(user_data, groups_dict, file_path, contacts_dict, current_user)
+            Groups.groups_menu(user_data, groups_dict, file_path,
+                               contacts_dict, current_user)
         elif options['choice'] == 'Follow Up':
             os.system('clear')
-            FollowUp.follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path)
+            FollowUp.follow_up_menu(contacts_dict, current_user, user_data,
+                                    groups_dict, file_path)
         elif options['choice'] == 'Logout':
             print("Goodbye.")
             exit()

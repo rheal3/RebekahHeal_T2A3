@@ -11,7 +11,7 @@ import base64
 class EmailSetup:
 
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
-    'https://www.googleapis.com/auth/gmail.send']
+              'https://www.googleapis.com/auth/gmail.send']
 
     @classmethod
     def get_credentials(cls, current_user):
@@ -23,10 +23,12 @@ class EmailSetup:
                 credentials = pickle.load(token)
 
         if not credentials or not credentials.valid:
-            if credentials and credentials.expired and credentials.refresh_token:
+            if (credentials and credentials.expired and
+               credentials.refresh_token):
                 credentials.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', EmailSetup.SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file(
+                       'credentials.json', EmailSetup.SCOPES)
                 credentials = flow.run_local_server(port=0)
 
             with open(token_file, 'wb') as token:
@@ -40,16 +42,17 @@ class EmailSetup:
         message['to'] = to
         message['from'] = sender
         message['subject'] = subject
-        raw_message = base64.urlsafe_b64encode(message.as_string().encode("utf-8"))
-        return {'raw': raw_message.decode("utf-8")}
+        raw_msg = base64.urlsafe_b64encode(message.as_string().encode("utf-8"))
+        return {'raw': raw_msg.decode("utf-8")}
 
     @classmethod
     def send_message(cls, message, current_user, user_id='me'):
-        service = build('gmail', 'v1', credentials=EmailSetup.get_credentials(current_user))
+        service = build('gmail', 'v1',
+                        credentials=EmailSetup.get_credentials(current_user))
 
         try:
-            message = service.users().messages().send(userId=user_id, body=message).execute()
-            # print(f"Message Id: {message['id']}")
+            message = service.users().messages().send(userId=user_id,
+                                                      body=message).execute()
             print("Message sent.")
             time.sleep(1.5)
             return message

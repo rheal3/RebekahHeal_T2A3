@@ -2,16 +2,22 @@
 # from googleapiclient.discovery import build # remove after testing.
 import inquirer
 from manage_contacts import ManageContacts
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 from termcolor import cprint
 from email_setup import EmailSetup
 import os
 
+
 class FollowUp:
     @staticmethod
-    def follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path):
+    def follow_up_menu(contacts_dict, current_user, user_data, groups_dict,
+                       file_path):
         os.system('clear')
-        options = inquirer.prompt([inquirer.List('choice', message="Choose Option", choices=['View Follow Up', 'Follow Up By Email', 'Go Back'])])
+        options = inquirer.prompt([inquirer.List('choice',
+                                  message="Choose Option",
+                                  choices=['View Follow Up',
+                                           'Follow Up By Email',
+                                           'Go Back'])])
 
         os.system('clear')
         if options['choice'] == 'View Follow Up':
@@ -22,29 +28,37 @@ class FollowUp:
             FollowUp.send_email(current_user, contacts_dict, groups_dict)
         elif options['choice'] == 'Go Back':
             from user import User
-            User.main_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
-        FollowUp.follow_up_menu(contacts_dict, current_user, user_data, groups_dict, file_path)
-
+            User.main_menu(user_data, contacts_dict, groups_dict,
+                           file_path, current_user)
+        FollowUp.follow_up_menu(contacts_dict, current_user, user_data,
+                                groups_dict, file_path)
 
     @classmethod
-    def set_dates(cls, selected_contact, groups_dict): #Call within follow up function to get next date.. after follow up :)
+    def set_dates(cls, selected_contact: dict, groups_dict):
         if len(selected_contact['groups']) > 0:
-            nearest_contact = min([int(groups_dict[group]) for group in selected_contact['groups']])
-            selected_contact['follow_up']['last_contact'] = datetime.today().strftime("%Y-%m-%d")
-            selected_contact['follow_up']['next_contact'] = (datetime.today() + timedelta(days=nearest_contact)).strftime("%Y-%m-%d")
+            nearest_contact = min([int(groups_dict[group]) for group in
+                                  selected_contact['groups']])
+            contact = selected_contact['follow_up']
+            contact['last_contact'] = (datetime.today().strftime("%Y-%m-%d"))
+            contact['next_contact'] = (datetime.today() + timedelta
+                                       (days=nearest_contact)).strftime(
+                                       "%Y-%m-%d")
         else:
             print("Add contact to group to set next follow up date.")
 
     @classmethod
     def view_follow_up(cls, contacts_dict):
         os.system('clear')
+
         def days_between(date):
             today = datetime.today()
             date = datetime.strptime(date, "%Y-%m-%d")
             return (date - today).days
 
-        all_contacts = {contact:details['follow_up']['next_contact'] for contact, details in contacts_dict.items()}
-        contact_dates = [date for contact, date in all_contacts.items() if date != '']
+        all_contacts = {contact: details['follow_up']['next_contact']
+                        for contact, details in contacts_dict.items()}
+        contact_dates = [date for contact, date in all_contacts.items()
+                         if date != '']
         done = [date for contact, date in all_contacts.items() if date == '']
         if len(contact_dates) > 0:
             print(f"\033[1m{'Name:':25}{'Next Contact Date:'}\033[0m")
@@ -87,9 +101,11 @@ class FollowUp:
 
         os.system('clear')
         print(f"\nSubject: {subject}\n\n{message_text}\n")
-        send = inquirer.confirm("Are you sure you want to send?", default=False)
+        message = "Are you sure you want to send?"
+        send = inquirer.confirm(message, default=False)
         if send:
-            EmailSetup.send_message(EmailSetup.create_message(to['email'], subject, message_text), current_user)
+            EmailSetup.send_message(EmailSetup.create_message(to['email'],
+                                    subject, message_text), current_user)
             FollowUp.set_dates(to, groups_dict)
         else:
             print("Message deleted.")
