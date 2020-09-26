@@ -6,6 +6,7 @@ from follow_up import FollowUp
 import os
 import bcrypt
 
+
 class User:
     user_options = ["Login", "Create User"]
 
@@ -33,12 +34,11 @@ class User:
     def hash_password(password):
         return bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
 
-
     @classmethod
     def login(cls, user_data):
         def username_validation(answers, current):
             if not user_data.get(current, False):
-                raise errors.ValidationError('', reason="Invalid username.")
+                raise inquirer.errors.ValidationError('', reason="Invalid username.")
             return True
 
         user = inquirer.prompt([inquirer.Text('username', message="Enter username", validate=username_validation)])
@@ -48,19 +48,17 @@ class User:
             password = inquirer.prompt([inquirer.Password('password', message="Enter Password")])
         return user['username']
 
-
-
     @classmethod
     def create_user(cls, user_data):
         def username_validation(answers, current):
             if user_data.get(current, False):
-                raise errors.ValidationError('', reason="Username already in use.")
+                raise inquirer.errors.ValidationError('', reason="Username already in use.")
             current = current.lower()
             return True
 
         def password_validation(answers, current):
             if current != answers['initial_password']:
-                raise errors.ValidationError('', reason="Passwords do not match.")
+                raise inquirer.errors.ValidationError('', reason="Passwords do not match.")
             return True
 
         new_user = inquirer.prompt([inquirer.Text('username', message="Enter Username", validate=username_validation), inquirer.Password('initial_password', message="Enter Password"), inquirer.Password('password', message="Re-Enter Password", validate=password_validation)])
@@ -74,7 +72,6 @@ class User:
             options = inquirer.prompt([inquirer.List('choice', message='Choose Option', choices=['Manage Contacts', 'Manage Groups', 'Follow Up', 'Logout'])])
         else:
             ManageContacts.manage_contacts_menu(user_data, contacts_dict, groups_dict, file_path, current_user)
-
 
         if options['choice'] == 'Manage Contacts':
             os.system('clear')
