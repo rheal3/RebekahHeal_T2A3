@@ -20,22 +20,18 @@ Navigate to the directory with the application and install dependencies:
 $ pip install --upgrade pip
 $ pip3 install -r requirements.txt
 ```
-Run application:
+Within the application directory, navigate to the 'src' directory and run the application:
 ```
+cd src
 python3 main.py
 ```
 
-{recommended to use virtual environment}
+To send an email through the app you will have to
 
 ## Software Development Plan
 
 ### Statement of Purpose and Scope
-{APP NAME} provides the user with a simple and easy way to store and manage their contacts.
-
-
-### Features
-
-The main functions provided by {APP NAME} are:
+{APP NAME} provides the user with a simple and easy way to store and manage their contacts. The main functions provided by {APP NAME} are:
 1. Storing contacts.
     - Contacts are inputted with first name, last name, email, phone number, and groups. These fields can be edited at any time.
     - Contacts can be viewed individually or in list format.
@@ -47,10 +43,15 @@ The main functions provided by {APP NAME} are:
     - The user is able to view a list of contacts and the next scheduled follow up date (calculated using the days between contacts inputted by the user when creating their groups). If the next date of contact is within 1 day or has passed the contact is displayed in red. If the next date of contact is 2 or 3 days the contact is displayed in yellow. If the next date of contact is greater than 3 days the contact is displayed in green. If the contact is not part of a group it is displayed in black at the bottom of the list and will not have a next contact date.
     - Using the gmail API the user is able to send emails to the contacts within their stored contacts. The gmail API uses OAuth2 to validate the sending user.
 
+
 ### User Interaction and Experience
+The user interacts with the app through a simple interface using the arrow keys. The up and down arrow keys are used to interact with the menu options while the right and left arrow keys are used to select and deselect from a list of items. The user is able to type in details of their contacts and group preferences.
 
 ### Control Flow Diagram
 
+![Flowchart](./docs/flowchart.jpg)
+
+
 ### Implementation Plan
 
-### Testing
+![Implementation](./docs/implementation.pdf)

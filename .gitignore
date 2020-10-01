@@ -1,4 +1,3 @@
 venv
-.client.json
-credentials.json
+client.json
 *token.pickle

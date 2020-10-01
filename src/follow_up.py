@@ -28,7 +28,8 @@ class FollowUp:
             try:
                 FollowUp.send_email(current_user, contacts_dict, groups_dict)
             except FileNotFoundError:
-                print("Unable to send message.")
+                input("Unable to send message. Press Enter to continue.")
+
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict,
