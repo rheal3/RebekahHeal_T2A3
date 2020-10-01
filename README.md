@@ -6,6 +6,7 @@ The Follow Up App is an easy to use application for storing contacts, managing f
 _System Requirement_: You must have a version of Python 3 installed on your computer for this app to work.
 
 **Within Terminal:**
+
 Set up your desired method of python virtual environment. Activate your environment and run the following:
 
 Navigate to the directory with the application and install dependencies:
