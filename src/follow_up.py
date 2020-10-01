@@ -25,7 +25,10 @@ class FollowUp:
             FollowUp.view_follow_up(contacts_dict)
             input("Press Enter to continue")
         elif options['choice'] == 'Follow Up By Email':
-            FollowUp.send_email(current_user, contacts_dict, groups_dict)
+            try:
+                FollowUp.send_email(current_user, contacts_dict, groups_dict)
+            except FileNotFoundError:
+                print("Unable to send message.")
         elif options['choice'] == 'Go Back':
             from user import User
             User.main_menu(user_data, contacts_dict, groups_dict,
