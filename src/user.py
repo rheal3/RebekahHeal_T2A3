@@ -69,7 +69,7 @@ class User:
             if user_data.get(current, False):
                 message = "Username already in use."
                 raise inquirer.errors.ValidationError('', reason=message)
-            if current.strip() <= 0:
+            if current.strip() == "":
                 message = "Invalid username."
                 raise inquirer.errors.ValidationError('', reason=message)
             current = current.lower()
