@@ -116,12 +116,12 @@ class Groups:
                 print("Deleted.")
                 for person in contacts_dict:
                     if selected_group in contacts_dict[person]['groups']:
-                         contacts_dict[person]['groups'].remove(selected_group)
+                        contacts_dict[person]['groups'].remove(selected_group)
 
     @classmethod
     def view_all_groups(cls, groups_dict, contacts_dict):
         print(f"\033[1m{'Group Name:':20}{'Days Between Contact:':30}\
-              {'Contacts In Group:'}\033[0m")
+{'Contacts In Group:'}\033[0m")
         for group, days in groups_dict.items():
             contact_in_group = [contact
                                 for contact, info in contacts_dict.items()
@@ -134,7 +134,8 @@ class Groups:
     @classmethod
     def add_contacts_to_group(cls, contacts_dict, selected_group, groups_dict):
         os.system('clear')
-        message = f"Add contacts to \033[1m{selected_group}\033 [0m\033[3m(select using > arrow key)\033[0m"
+        message = f"Add contacts to \033[1m{selected_group}\033 \
+[0m\033[3m(select using > arrow key)\033[0m"
         selected = inquirer.prompt([inquirer.Checkbox('contacts',
                                    message=message,
                                    choices=contacts_dict.keys())])

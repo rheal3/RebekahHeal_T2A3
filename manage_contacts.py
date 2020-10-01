@@ -76,7 +76,7 @@ class ManageContacts:
                               message='New Contact Email',
                               validate=cls.email_validation)
         phone = inquirer.Text(name='phone',
-                              message='New Contact Phone Number',
+                              message='New Contact Phone Number ##########',
                               validate=cls.phone_validation)
         message = "Select groups \033[3m(select using > arrow key)\033[0m"
         groups = inquirer.Checkbox(name='groups',
@@ -149,13 +149,15 @@ class ManageContacts:
     def view_individual_contact(cls, contact: dict):
         os.system('clear')
         print(f"""Name: {contact['name']}
-        Email: {contact['email']}
-        Phone: {contact['phone']}
-        Groups: {contact['groups']}
-        Last Contact Date: {contact['follow_up']['last_contact']}""")
+Email: {contact['email']}
+Phone: {contact['phone']}
+Groups: {contact['groups']}
+Last Contact Date: {contact['follow_up']['last_contact']}""")
 
     @classmethod
     def view_all_contacts(cls, contacts_dict):
-        print(f"\033[1m{'Name:':25}{'Email:':30}{'Phone:':18}{'Groups:'}\033[0m")
+        print(f"\033[1m{'Name:':25}{'Email:':30}{'Phone:':18}{'Groups:'}\
+\033[0m")
         for contact, details in contacts_dict.items():
-            print(f"{details['name']:25}{details['email']:30}{details['phone']:18}{details['groups']}")
+            print(f"{details['name']:25}{details['email']:30}\
+{details['phone']:18}{details['groups']}")
