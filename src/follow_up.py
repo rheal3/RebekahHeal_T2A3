@@ -21,7 +21,6 @@ class FollowUp:
 
         os.system('clear')
         if options['choice'] == 'View Follow Up':
-            # clear screen
             FollowUp.view_follow_up(contacts_dict)
             input("Press Enter to continue")
         elif options['choice'] == 'Follow Up By Email':
@@ -29,6 +28,8 @@ class FollowUp:
                 FollowUp.send_email(current_user, contacts_dict, groups_dict)
             except FileNotFoundError:
                 input("Unable to send message. Press Enter to continue.")
+            except:
+                input("\nUnable to authenticate. Press Enter to continue.")
 
         elif options['choice'] == 'Go Back':
             from user import User
@@ -87,7 +88,7 @@ class FollowUp:
 
     @classmethod
     def get_email_contents(cls):
-        print("Enter/Paste email content. Use Ctrl-D to save.")
+        print("Enter/Paste email content. On new line use Ctrl-D to save.")
         contents = []
         while True:
             try:

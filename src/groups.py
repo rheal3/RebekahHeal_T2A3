@@ -134,8 +134,8 @@ class Groups:
     @classmethod
     def add_contacts_to_group(cls, contacts_dict, selected_group, groups_dict):
         os.system('clear')
-        message = f"Add contacts to \033[1m{selected_group}\033 \
-[0m\033[3m(select using > arrow key)\033[0m"
+        message = f"Add contacts to \033[1m{selected_group}\033[0m \
+\033[3m(select using > arrow key)\033[0m"
         selected = inquirer.prompt([inquirer.Checkbox('contacts',
                                    message=message,
                                    choices=contacts_dict.keys())])

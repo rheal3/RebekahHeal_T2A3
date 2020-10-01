@@ -15,7 +15,7 @@ class User:
         os.system('clear')
         if len(user_data) > 0:
             options = inquirer.prompt([inquirer.List('choice',
-                                      message="WELCOME TO THE APP!!!",
+                                      message="WELCOME TO THE FOLLOW UP APP!!",
                                       choices=cls.user_options)])
             if options['choice'] == 'Login':
                 user = cls.login(user_data)
@@ -38,6 +38,7 @@ class User:
     def hash_password(password):
         return bcrypt.hashpw(password.encode('utf8'),
                              bcrypt.gensalt()).decode('utf8')
+
     @staticmethod
     def check_hashed_pass(typed, stored):
         return bcrypt.checkpw(typed, stored)
@@ -56,8 +57,8 @@ class User:
         password = inquirer.prompt([inquirer.Password('password',
                                    message="Enter Password")])
         while not cls.check_hashed_pass(password['password'].encode('utf8'),
-                                 user_data[user['username']]['password'].
-                                 encode('utf8')):
+                                        user_data[user['username']]
+                                        ['password'].encode('utf8')):
             print("Incorrect password.")
             password = inquirer.prompt([inquirer.Password('password',
                                        message="Enter Password")])

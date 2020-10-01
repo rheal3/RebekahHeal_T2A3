@@ -1,19 +1,12 @@
-# {APP NAME}
+# Follow Up App
 
-{APP NAME} is an easy to use application for storing contacts, managing follow ups, and following up.
+The Follow Up App is an easy to use application for storing contacts, managing follow ups, and following up.
 
 ## Installation Steps
 _System Requirement_: You must have a version of Python 3 installed on your computer for this app to work.
 
 **Within Terminal:**
-Make sure the latest version of Python (Python 3) is installed on your machine:
-```
-$ python --version
-```
-If you do not have a version of Python 3 installed:
-```
-$ brew install python
-```
+Set up your desired method of python virtual environment. Activate your environment and run the following:
 
 Navigate to the directory with the application and install dependencies:
 ```
@@ -25,6 +18,8 @@ Within the application directory, navigate to the 'src' directory and run the ap
 cd src
 python3 main.py
 ```
+
+**First Time Sending An Email:**
 
 The first time you send an email through the app you will need to allow the application to send emails.
 When you send the email a window will open in your browser. Follow the steps below to allow the application to send emails through your account:
@@ -39,7 +34,7 @@ When you send the email a window will open in your browser. Follow the steps bel
 ## Software Development Plan
 
 ### Statement of Purpose and Scope
-{APP NAME} provides the user with a simple and easy way to store and manage their contacts. The main functions provided by {APP NAME} are:
+The Follow Up App provides the user with a simple and easy way to store and manage their contacts. The main functions provided by the Follow Up App are:
 1. Storing contacts.
     - Contacts are inputted with first name, last name, email, phone number, and groups. These fields can be edited at any time.
     - Contacts can be viewed individually or in list format.
