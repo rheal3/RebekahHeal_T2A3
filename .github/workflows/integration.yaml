@@ -21,19 +21,19 @@ jobs:
       - name: Run Tests
         run: |
           python -m unittest discover test
-  # deployment:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Fresh Clone & Repo Install
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ###
-  #         username: ###
-  #         key: $###
-  #         port: 22
-  #         script: |
-  #           rm -rf ###
-  #           git clone ###
-  #           python3.8 -m venv /home/###/###/venv
-  #           /home/###/###/venv/bin/pip3.8 install -r /home/###/###/requirements.txt
+  deployment:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fresh Clone & Repo Install
+        uses: appleboy/ssh-action@master
+        with:
+          host: 35.174.123.14
+          username: github-actions
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            rm -rf RebekahHeal_T2A3
+            git clone https://github.com/rheal3/RebekahHeal_T2A3.git
+            python3.8 -m venv /home/github-actions/RebekahHeal_T2A3/venv/
+            /home/github-actions/RebekahHeal_T2A3/venv/bin/pip3.8 install -r requirements.txt
