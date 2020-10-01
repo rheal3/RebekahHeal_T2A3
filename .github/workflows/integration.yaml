@@ -36,4 +36,4 @@ jobs:
             rm -rf RebekahHeal_T2A3
             git clone https://github.com/rheal3/RebekahHeal_T2A3.git
             python3.8 -m venv /home/github-actions/RebekahHeal_T2A3/venv/
-            /home/github-actions/RebekahHeal_T2A3/venv/bin/pip3.8 install -r requirements.txt
+            /home/github-actions/RebekahHeal_T2A3/venv/bin/pip install -r requirements.txt
