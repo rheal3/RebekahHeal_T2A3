@@ -38,6 +38,9 @@ class User:
     def hash_password(password):
         return bcrypt.hashpw(password.encode('utf8'),
                              bcrypt.gensalt()).decode('utf8')
+    @staticmethod
+    def check_hashed_pass(typed, stored):
+        return bcrypt.checkpw(typed, stored)
 
     @classmethod
     def login(cls, user_data):
@@ -52,7 +55,7 @@ class User:
                                validate=username_validation)])
         password = inquirer.prompt([inquirer.Password('password',
                                    message="Enter Password")])
-        while not bcrypt.checkpw(password['password'].encode('utf8'),
+        while not cls.check_hashed_pass(password['password'].encode('utf8'),
                                  user_data[user['username']]['password'].
                                  encode('utf8')):
             print("Incorrect password.")

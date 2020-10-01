@@ -72,7 +72,7 @@ class Groups:
 
     # same as select_contact <- create one function for both? where?
     @classmethod
-    def select_group(cls, groups_dict: dict) -> dict:
+    def select_group(cls, groups_dict):
         choice = inquirer.prompt([inquirer.List('selected',
                                  message='Select Group',
                                  choices=groups_dict.keys())])
