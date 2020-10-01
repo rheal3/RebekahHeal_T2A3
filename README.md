@@ -26,7 +26,15 @@ cd src
 python3 main.py
 ```
 
-To send an email through the app you will have to
+The first time you send an email through the app you will need to allow the application to send emails.
+When you send the email a window will open in your browser. Follow the steps below to allow the application to send emails through your account:
+![allow](./docs/one.png)
+![allow](./docs/two.png)
+![allow](./docs/three.png)
+![allow](./docs/four.png)
+![allow](./docs/five.png)
+
+If you do not allow the app access to your email you will not be able to send emails through the app.
 
 ## Software Development Plan
 
@@ -54,4 +62,4 @@ The user interacts with the app through a simple interface using the arrow keys.
 
 ### Implementation Plan
 
-![Implementation](./docs/implementation.pdf)
+![Implementation](./docs/implementation.jpg)
