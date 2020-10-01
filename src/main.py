@@ -1,7 +1,7 @@
 from user import User
 from file import File
 
-file_path = 'client.json'
+file_path = '.client.json'
 user_data = File.load_data(file_path)
 current_user = User.user_menu(user_data, file_path)
 
