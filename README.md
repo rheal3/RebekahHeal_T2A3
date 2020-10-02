@@ -2,6 +2,8 @@
 
 The Follow Up App is an easy to use application for storing contacts, managing follow ups, and following up.
 
+Github: https://github.com/rheal3/RebekahHeal_T2A3.git
+
 ## Installation Steps
 _System Requirement_: You must have a version of Python 3 installed on your computer for this app to work.
 
